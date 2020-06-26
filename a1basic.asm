@@ -1815,7 +1815,7 @@ Lec4c:		sta	noun_stk_l,x
 
 		fcb	$00
 		fcb	$7e
-		fcb	$8c
+		synstr	","
 		fcb	$33
 
 		fcb	$00
@@ -1827,9 +1827,16 @@ Lec4c:		sta	noun_stk_l,x
 		fcb	$12
 		fcb	$00
 		fcb	$40
-		fcb	$89,$c9,$47,$9d,$17,$68
+		fcb	$89
+		fcb	$c9
+		fcb	$47
 		fcb	$9d
-		fcb	$0a,$00,$40
+		fcb	$17
+		fcb	$68
+		fcb	$9d
+		fcb	$0a
+		fcb	$00
+		fcb	$40
 
 		fcb	$60
 		fcb	$8d
@@ -1839,7 +1846,7 @@ Lec4c:		sta	noun_stk_l,x
 
 		fcb	$00
 		fcb	$7e
-		fcb	$8c
+		synstr	","
 		fcb	$3c
 
 		fcb	$00
@@ -1850,91 +1857,238 @@ Lec4c:		sta	noun_stk_l,x
 		fcb	$bf
 		fcb	$1b
 		fcb	$4b
-		fcb	$67
+
+		fcb	$67		; numeric expression, ned of rule
 		synstr	"AT"
-		fcb	$07,$8c,$07
+		fcb	$07		; numeric expression
+		synstr	","
+		fcb	$07		; numeric expression
 		synstr	"HLIN"
-		fcb	$67,$8c,$07
+
+		fcb	$67		; numeric expression, ned of rule
+		synstr	","
+		fcb	$07		; numeric expression
 		synstr	"PLOT"
-		fcb	$67,$9d
+
+		fcb	$67		; numeric expression, ned of rule
+		fcb	$9d
 		synstr	"COLOR"
-		fcb	$67,$8c,$07
+
+		fcb	$67		; numeric expression, ned of rule
+		synstr	","
+		fcb	$07		; numeric expression
 		synstr	"POKE"
+
 		synstr1	"PRINT"
-		fcb	$7f,$0e
+
+		fcb	$7f
+		fcb	$0e
 		fcb	$27
 		synstr	"PRINT"
-		fcb	$7f,$0e
+
+		fcb	$7f
+		fcb	$0e
 		fcb	$28
 		synstr	"PRINT"
-		fcb	$64,$07
+
+		fcb	$64
+		fcb	$07
 		synstr	"IF"
+
 		fcb	$67
 		synstr	"GOTO"
+
 		fcb	$78
 		synstr	"LET"
-		fcb	$78,$7f,$02
+
+		fcb	$78		; end of rule
+		fcb	$7f		; branch "backward" one byte
+		fcb	$02		; comment characte
 		synstr	"REM"
+
 		fcb	$67
 		synstr	"GOSUB"
+
 		synstr1	"RETURN"
-		fcb	$7e,$8c,$39
+
+		fcb	$7e
+		synstr	","
+		fcb	$39
 		synstr	"NEXT"
+
 		fcb	$67
 		synstr	"STEP"
+
 		fcb	$27
 		synstr	"TO"
-		fcb	$07,$9d,$19
+
+		fcb	$07
+		fcb	$9d
+		fcb	$19
 		synstr	"FOR"
-		fcb	$7f,$05,$37
+
+		fcb	$7f
+		fcb	$05
+		fcb	$37
 		synstr	"INPUT"
-		fcb	$7f,$05,$28
+
+		fcb	$7f
+		fcb	$05
+		fcb	$28
 		synstr	"INPUT"
-		fcb	$7f,$05,$2a
+
+		fcb	$7f
+		fcb	$05
+		fcb	$2a
 		synstr	"INPUT"
+
 		synstr1	"END"
+
 		fcb	$00
-		fcb	$ff,$ff
+		fcb	$ff
+		fcb	$ff
 
 syntabl2:	fcb	$47
 		synstr	"TAB"
-		fcb	$7f,$0d,$30
+
+		fcb	$7f
+		fcb	$0d
+		fcb	$30
 		synstr	"DIM"
-		fcb	$7f,$0d,$23
+
+		fcb	$7f		; branch "backward" 1 byte
+		fcb	$0d		; category 13, required
+		fcb	$23		; category 3, optional
 		synstr	"DIM"
-		fcb	$67
+
+		fcb	$67		; category 7, end of rule
 		synstr	"CALL"
-		fcb	$00,$40,$80
-		fcb	$c0,$c1,$80,$00,$47,$8c,$68,$8c
-		fcb	$db,$67,$9b,$68,$9b,$50,$8c,$63
-		fcb	$8c,$7f,$01,$51,$07,$88,$29,$84
-		fcb	$80,$c4,$80,$57,$71,$07,$88,$14
-		synstr1	"LOMEM"
-		fcb	$ed,$a5,$ad
-		fcb	$a9,$a8
-		synstr1	"COLOR"
-		fcb	$71
-		fcb	$08,$88,$ae,$a5,$ac,$68,$83,$08
-		fcb	$68,$9d,$08,$71,$07,$88,$60,$76
-		synstr	"NOT"
-		fcb	$76,$8d,$76,$8b,$51
-		fcb	$07,$88,$19,$b8
-		synstr	"RND"
-		fcb	$f2
-		fcb	$b3,$b5,$f3,$a2,$a1,$ee,$a7,$b3
-		synstr1	"RND"
-		synstr1	"PEEK"
+
+		fcb	$00
+		fcb	$40
+		fcb	$80
+		fcb	$c0
+		fcb	$c1
+		fcb	$80
+		fcb	$00
+		fcb	$47
+		fcb	$8c
+		fcb	$68
+		fcb	$8c
+		fcb	$db
+		fcb	$67
+		fcb	$9b
+		fcb	$68
+		fcb	$9b
+		fcb	$50
+		fcb	$8c
+		fcb	$63
+		synstr	","
+		fcb	$7f
+		fcb	$01
 		fcb	$51
-		fcb	$07,$88,$39,$81,$c1,$4f,$7f,$0f
-		fcb	$2f,$00,$51,$06,$88,$29,$c2,$0c
-		fcb	$82,$57,$8c,$6a,$8c,$42
+		fcb	$07
+		fcb	$88
+		fcb	$29
+		fcb	$84
+		fcb	$80
+		fcb	$c4
+		fcb	$80
+		fcb	$57
+		fcb	$71
+		fcb	$07
+		synstr	"("
+		fcb	$14
+
+		synstr1	"LOMEM"
+
+		synstr1	"HIMEM"
+
+		synstr1	"COLOR"
+
+		fcb	$71
+		fcb	$08
+		synstr	"LEN("
+
+		fcb	$68
+		fcb	$83
+		fcb	$08
+
+		fcb	$68
+		fcb	$9d
+		fcb	$08
+		fcb	$71
+		fcb	$07
+		synstr	"("
+		fcb	$60
+		fcb	$76
+		synstr	"NOT"
+
+		fcb	$76
+		fcb	$8d
+		fcb	$76
+		synstr	"+"
+		fcb	$51
+		fcb	$07
+		synstr	"("
+		fcb	$19
+
+		synstr	"RNDX"		; can never be matched since it
+					; comes "after" RND
+
+		synstr1	"USR"
+
+		synstr1	"ABS"
+
+		synstr1	"SGN"
+
+		synstr1	"RND"
+
+		synstr1	"PEEK"
+
+		fcb	$51
+		fcb	$07
+		synstr	"("
+		fcb	$39
+		synstr	"!"
+		fcb	$c1
+		fcb	$4f
+		fcb	$7f		; branch "backward" one byte
+		fcb	$0f
+		fcb	$2f
+		fcb	$00
+		fcb	$51
+		fcb	$06
+		synstr	"("
+		fcb	$29
+		fcb	$c2
+		fcb	$0c
+		synstr	"\""
+		fcb	$57
+		synstr	","
+		fcb	$6a
+		synstr	","
+		fcb	$42
 		synstr	"THEN"
+
 		fcb	$60
 		synstr	"THEN"
-		fcb	$4f
-		fcb	$7e,$1e,$35,$8c,$27,$51,$07,$88
-		fcb	$09,$8b,$fe
 
+		fcb	$4f
+		fcb	$7e		; branch "backward" two bytes
+		fcb	$1e
+		fcb	$35
+		synstr	","
+		fcb	$27		; optional reset, numeric expr
+
+		fcb	$51
+		fcb	$07		; numeric expr
+		synstr	"("
+
+		fcb	$09
+		synstr	"+"
+
+		synstr1	"^"
 		synstr1	"MOD"
 		synstr1	"OR"
 		synstr1	"AND"
@@ -1953,44 +2107,53 @@ syntabl2:	fcb	$47
 		fcb	$00
 
 		fcb	$47
-		fcb	$9d
-		synstr	"LOMEM"
+		synstr	"LOMEM="
 
 		fcb	$76
-		fcb	$9d
-		synstr	"HIMEM"
+		synstr	"HIMEM="
 
 		synstr1	"OFF"
 
-		fcb	$60					; end of rule
-		fcb	$8c					; ,
-		fcb	$20
+		fcb	$60		; cat 0, end of rule
+		synstr	","
+		fcb	$20		; cat 0, reset of rule optional
 		synstr	"AUTO"
 
 		synstr1	"CLR"
+
 		synstr1	"SCR"
 
-		fcb	$60					; end of rule
-		fcb	$8c					; ,
-		fcb	$20
+		fcb	$60		; cat 0, end of rule
+		synstr	","
+		fcb	$20		; cat 0, rest of rule optional
 		synstr	"DEL"
 
 		synstr1	"RUN"
 
-		fcb	$60					; end of rule
+		fcb	$60		; cat 0, end of rule
 		synstr	"RUN"
 
 		synstr1	"LIST"
 
-		fcb	$60					; end of rule
-		fcb	$8c					; , (for LIST)
-		fcb	$20					; next token optional
+		fcb	$60		; cat 0, end of rule
+		synstr	","
+		fcb	$20		; cat 0, rest of rule optional
 		synstr	"LIST"
 
-		fcb	$7a,$7e,$9a,$22,$20
+		fcb	$7a
+		fcb	$7e
+		fcb	$9a
+		fcb	$22
+		fcb	$20
 
-		fcb	$00,$60,$03,$bf
-		fcb	$60,$03,$bf,$1f
+		fcb	$00
+		fcb	$60
+		fcb	$03
+		fcb	$bf
+		fcb	$60
+		fcb	$03
+		fcb	$bf
+		fcb	$1f
 
 print_str_comma:	jsr	tabout
 
