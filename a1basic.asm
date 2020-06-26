@@ -791,13 +791,13 @@ Le47d:		sty	syn_stk_l,x
 		sty	txtndxstk,x
 		ldy	token_index
 		sty	tokndxstk,x
-		and	#$1f	; 31 .
+		and	#$1f		; mask to get syntax category number
 		tay
-		lda	syntabl_index,y
+		lda	category_table,y
 
 Se491:		asl	a
 		tay
-		lda	#$76	; 118 v
+		lda	#$ec/2
 		rol
 		sta	synpag+1
 Le498:		bne	Le49b
@@ -1762,38 +1762,39 @@ Lec1b:		jmp	not_op
 
 		fcb	$ff,$ff
 
-syntabl_index:	fcb	$c1		; $00: unsigned integer
+category_table:
+		fcb	((syn_cat_00-1)/2)&$ff
 		fcb	$ff
-		fcb	$7f		; $02
+		fcb	((syn_cat_02-1)/2)&$ff
 		fcb	$d1		; $03
-		fcb	$cc		; $04
-		fcb	$c7		; $05
-		fcb	$cf		; $06
-		fcb	$ce		; $07: numeric expression
-		fcb	$c5		; $08
-		fcb	$9a		; $09
-		fcb	$98		; $0a
-		fcb	$8b		; $0b
-		fcb	$96		; $0c
-		fcb	$95		; $0d
-		fcb	$93		; $0f
-		fcb	$bf		; $10
-		fcb	$b2		; $11
-		fcb	$32		; $12
-		fcb	$2d		; $13
-		fcb	$2b		; $14
-		fcb	$bc		; $15
-		fcb	$b0		; $16
-		fcb	$ac		; $17
-		fcb	$be		; $18
-		fcb	$35		; $19: numeric variable name
-		fcb	$8e		; $1a
-		fcb	$61		; $1b
+		fcb	((syn_cat_04-1)/2)&$ff
+		fcb	((syn_cat_05-1)/2)&$ff
+		fcb	((syn_cat_06-1)/2)&$ff
+		fcb	((syn_cat_07-1)/2)&$ff	; numeric expressoin
+		fcb	((syn_cat_08-1)/2)&$ff
+		fcb	((syn_cat_09-1)/2)&$ff
+		fcb	((syn_cat_0a-1)/2)&$ff
+		fcb	((syn_cat_0b-1)/2)&$ff	; statement
+		fcb	((syn_cat_0c-1)/2)&$ff
+		fcb	((syn_cat_0d-1)/2)&$ff
+		fcb	((syn_cat_0e-1)/2)&$ff
+		fcb	((syn_cat_0f-1)/2)&$ff
+		fcb	((syn_cat_10-1)/2)&$ff
+		fcb	((syn_cat_11-1)/2)&$ff
+		fcb	((syn_cat_12-1)/2)&$ff
+		fcb	$2b		; $13
+		fcb	((syn_cat_14-1)/2)&$ff	; function
+		fcb	((syn_cat_15-1)/2)&$ff
+		fcb	((syn_cat_16-1)/2)&$ff
+		fcb	((syn_cat_17-1)/2)&$ff
+		fcb	$35		; $18
+		fcb	$8e		; $19: numeric variable name
+		fcb	((syn_cat_1a-1)/2)&$ff
 		fcb	$ff
 		fcb	$ff
 		fcb	$ff
-		fcb	$dd		; $1e
-		fcb	$fb		; $1f
+		fcb	((syn_cat_1e-1)/2)&$ff	; binary operator
+		fcb	((syn_cat_1f-1)/2)&$ff
 
 Tec40:		jsr	Sefc9
 		ora	rnd+1,x
@@ -1807,8 +1808,10 @@ Lec4c:		sta	noun_stk_l,x
 
 ; syntax tables
 		fcb	$40
-		fcb	$60
-		fcb	$8d
+
+		fcb	$60	; unsigned integer, end of rule
+		synstr	"-"
+syn_cat_13:
 
 		fcb	$60
 		fcb	$8b
@@ -1817,6 +1820,7 @@ Lec4c:		sta	noun_stk_l,x
 		fcb	$7e
 		synstr	","
 		fcb	$33
+syn_cat_12:
 
 		fcb	$00
 		fcb	$00
@@ -1827,11 +1831,17 @@ Lec4c:		sta	noun_stk_l,x
 		fcb	$12
 		fcb	$00
 		fcb	$40
-		fcb	$89
+		synstr	")"
+syn_cat_11:
+
 		fcb	$c9
+
 		fcb	$47
-		fcb	$9d
+		synstr	"="
+syn_cat_18:
+
 		fcb	$17
+
 		fcb	$68
 		fcb	$9d
 		fcb	$0a
@@ -1905,6 +1915,7 @@ Lec4c:		sta	noun_stk_l,x
 		fcb	$7f		; branch "backward" one byte
 		fcb	$02		; comment characte
 		synstr	"REM"
+syn_cat_1a:
 
 		fcb	$67
 		synstr	"GOSUB"
@@ -1943,12 +1954,13 @@ Lec4c:		sta	noun_stk_l,x
 		synstr	"INPUT"
 
 		synstr1	"END"
+syn_cat_02:
 
 		fcb	$00
 		fcb	$ff
 		fcb	$ff
 
-syntabl2:	fcb	$47
+		fcb	$47
 		synstr	"TAB"
 
 		fcb	$7f
@@ -1957,16 +1969,19 @@ syntabl2:	fcb	$47
 		synstr	"DIM"
 
 		fcb	$7f		; branch "backward" 1 byte
-		fcb	$0d		; category 13, required
-		fcb	$23		; category 3, optional
+		fcb	$0d		; category 0d, required
+		fcb	$23		; category 03, optional
 		synstr	"DIM"
 
-		fcb	$67		; category 7, end of rule
+		fcb	$67		; numeric expression, end of rule
 		synstr	"CALL"
+syn_cat_0b:
 
 		fcb	$00
 		fcb	$40
 		fcb	$80
+syn_cat_19:
+
 		fcb	$c0
 		fcb	$c1
 		fcb	$80
@@ -1980,23 +1995,33 @@ syntabl2:	fcb	$47
 		fcb	$9b
 		fcb	$68
 		fcb	$9b
+syn_cat_0e:
+
 		fcb	$50
 		fcb	$8c
 		fcb	$63
 		synstr	","
+syn_cat_0d:
+
 		fcb	$7f
 		fcb	$01
+syn_cat_0c:
+
 		fcb	$51
-		fcb	$07
+		fcb	$07		; numeric expression
 		fcb	$88
+syn_cat_0a:
+
 		fcb	$29
 		fcb	$84
 		fcb	$80
 		fcb	$c4
+syn_cat_09:
+
 		fcb	$80
 		fcb	$57
 		fcb	$71
-		fcb	$07
+		fcb	$07		; numeric expression
 		synstr	"("
 		fcb	$14
 
@@ -2018,8 +2043,10 @@ syntabl2:	fcb	$47
 		fcb	$9d
 		fcb	$08
 		fcb	$71
-		fcb	$07
+		fcb	$07		; numeric expressoin
 		synstr	"("
+syn_cat_16:
+
 		fcb	$60
 		fcb	$76
 		synstr	"NOT"
@@ -2028,10 +2055,13 @@ syntabl2:	fcb	$47
 		fcb	$8d
 		fcb	$76
 		synstr	"+"
+syn_cat_15:
+
 		fcb	$51
 		fcb	$07
 		synstr	"("
 		fcb	$19
+syn_cat_10:
 
 		synstr	"RNDX"		; can never be matched since it
 					; comes "after" RND
@@ -2045,17 +2075,25 @@ syntabl2:	fcb	$47
 		synstr1	"RND"
 
 		synstr1	"PEEK"
+syn_cat_14:
 
 		fcb	$51
-		fcb	$07
+		fcb	$07		; numeric expression
 		synstr	"("
+syn_cat_17:
+
 		fcb	$39
 		synstr	"!"
-		fcb	$c1
-		fcb	$4f
+syn_cat_0f:
+
+		fcb	$c1		; parse 0-9, end of rule
+
+		fcb	$4f		; cat 15, end of category
 		fcb	$7f		; branch "backward" one byte
-		fcb	$0f
-		fcb	$2f
+		fcb	$0f		; cat 15
+syn_cat_00:
+
+		fcb	$2f		; cat 15
 		fcb	$00
 		fcb	$51
 		fcb	$06
@@ -2063,22 +2101,30 @@ syntabl2:	fcb	$47
 		fcb	$29
 		fcb	$c2
 		fcb	$0c
+syn_cat_08:
+
 		synstr	"\""
 		fcb	$57
 		synstr	","
 		fcb	$6a
+syn_cat_05:
+
 		synstr	","
 		fcb	$42
 		synstr	"THEN"
 
 		fcb	$60
 		synstr	"THEN"
+syn_cat_04:
 
 		fcb	$4f
 		fcb	$7e		; branch "backward" two bytes
 		fcb	$1e
+syn_cat_07:
 		fcb	$35
 		synstr	","
+syn_cat_06:
+
 		fcb	$27		; optional reset, numeric expr
 
 		fcb	$51
@@ -2087,6 +2133,7 @@ syntabl2:	fcb	$47
 
 		fcb	$09
 		synstr	"+"
+syn_cat_03:
 
 		synstr1	"^"
 		synstr1	"MOD"
@@ -2103,6 +2150,7 @@ syntabl2:	fcb	$47
 		synstr1	"*"
 		synstr1	"-"
 		synstr1	"+"
+syn_cat_1e:
 
 		fcb	$00
 
@@ -2114,37 +2162,38 @@ syntabl2:	fcb	$47
 
 		synstr1	"OFF"
 
-		fcb	$60		; cat 0, end of rule
+		fcb	$60		; unsigned integer, end of rule
 		synstr	","
-		fcb	$20		; cat 0, reset of rule optional
+		fcb	$20		; (optional) unsigned integer
 		synstr	"AUTO"
 
 		synstr1	"CLR"
 
 		synstr1	"SCR"
 
-		fcb	$60		; cat 0, end of rule
+		fcb	$60		; unsgined integer, end of rule
 		synstr	","
-		fcb	$20		; cat 0, rest of rule optional
+		fcb	$20		; (optional) unsigned integer
 		synstr	"DEL"
 
-		synstr1	"RUN"
+		synstr1	"RUN"		; RUN with no line number
 
-		fcb	$60		; cat 0, end of rule
+		fcb	$60		; unsigned integer, end of rule
 		synstr	"RUN"
 
 		synstr1	"LIST"
 
-		fcb	$60		; cat 0, end of rule
+		fcb	$60		; unsigned integer, end of rule
 		synstr	","
-		fcb	$20		; cat 0, rest of rule optional
+		fcb	$20		; (optional) unsigned integer
 		synstr	"LIST"
 
 		fcb	$7a
 		fcb	$7e
 		fcb	$9a
 		fcb	$22
-		fcb	$20
+		fcb	$20		; (optional) unsigned integer
+syn_cat_1f:
 
 		fcb	$00
 		fcb	$60
