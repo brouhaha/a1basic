@@ -230,36 +230,36 @@ Le083:		jsr	Se018
 		jsr	Se011
 Le095:		txa
 Le096:		jsr	cout
-Le099:		lda	#$25	; 37 %
+Le099:		lda	#$25
 		jsr	Se01a
 		tax
 		bmi	Le096
 		sta	p2
-list_token:	cmp	#$01	; 1 .
+list_token:	cmp	#$01
 		bne	Le0ac
 		ldx	x_save
 		jmp	crout
 Le0ac:		pha
 		sty	acc
-		ldx	#$ed	; 237 m
+		ldx	#$ed
 		stx	acc+1
-		cmp	#$51	; 81 Q
+		cmp	#$51
 		bcc	Le0bb
 		dec	acc+1
-		sbc	#$50	; 80 P
+		sbc	#$50
 Le0bb:		pha
 		lda	(acc),y
 Le0be:		tax
 		dey
 		lda	(acc),y
 		bpl	Le0be
-		cpx	#$c0	; 192 @
+		cpx	#$c0
 		bcs	Le0cc
-		cpx	#$00	; 0 .
+		cpx	#$00
 		bmi	Le0be
 Le0cc:		tax
 		pla
-		sbc	#$01	; 1 .
+		sbc	#$01
 		bne	Le0bb
 		bit	p2
 		bmi	Le0d9
@@ -267,19 +267,19 @@ Le0cc:		tax
 Le0d9:		lda	(acc),y
 		bpl	Le0ed
 		tax
-		and	#$3f	; 63 ?
+		and	#$3f
 		sta	p2
 		clc
-		adc	#$a0	; 160  
+		adc	#' '+$80
 		jsr	cout
 		dey
-		cpx	#$c0	; 192 @
+		cpx	#$c0
 		bcc	Le0d9
 Le0ed:		jsr	Se00c
 		pla
-		cmp	#$5d	; 93 ]
+		cmp	#$5d
 		beq	Le099
-		cmp	#$28	; 40 (
+		cmp	#$28
 		bne	Le083
 		beq	Le099
 
@@ -287,7 +287,7 @@ paren_substr:	jsr	Se118
 		sta	noun_stk_l,x
 		cmp	noun_stk_h_str,x
 Le102:		bcc	Le115
-string_err:	ldy	#$2b	; 43 +
+string_err:	ldy	#$2b
 go_errmess_1:	jmp	do_error
 
 comma_substr:	jsr	getbyte
@@ -300,7 +300,7 @@ Le115:		jmp	left_paren
 Se118:		jsr	getbyte
 		beq	string_err
 		sec
-		sbc	#$01	; 1 .
+		sbc	#$01
 		rts
 
 str_arr_dest:	jsr	Se118
@@ -308,7 +308,7 @@ str_arr_dest:	jsr	Se118
 		clc
 		sbc	noun_stk_h_str,x
 		jmp	Le102
-Le12c:		ldy	#$14	; 20 .
+Le12c:		ldy	#$14
 		bne	go_errmess_1
 
 dim_str:	jsr	Se118
@@ -326,9 +326,9 @@ Le134:		lda	noun_stk_l,x
 		sbc	pp+1
 		bcs	Le12c
 		lda	aux
-		adc	#$fe	; 254 ~
+		adc	#$fe
 		sta	aux
-		lda	#$ff	; 255 .
+		lda	#$ff
 		tay
 		adc	aux+1
 		sta	aux+1
@@ -348,17 +348,17 @@ Le161:		pla
 
 		nop	; unused
 
-Le16d:		ldy	#$80	; 128 .
+Le16d:		ldy	#$80
 Le16f:		bne	go_errmess_1
 
-input_str:	lda	#$00	; 0 .
+input_str:	lda	#$00
 		jsr	push_a_noun_stk
-		ldy	#$02	; 2 .
+		ldy	#$02
 		sty	noun_stk_h_str,x
 		jsr	push_a_noun_stk
-		lda	#$bf	; 191 ?
+		lda	#$bf
 		jsr	cout
-		ldy	#$00	; 0 .
+		ldy	#$00
 		jsr	read_line
 		sty	noun_stk_h_str,x
 		
@@ -382,7 +382,7 @@ Le199:		lda	rnd,x
 		ldy	noun_stk_l,x
 		cpy	p2
 		bcc	Le1ae
-		ldy	#$83	; 131 .
+		ldy	#$83
 		bne	Le16f
 Le1ae:		sta	(aux),y
 		inc	noun_stk_l,x
@@ -397,13 +397,13 @@ Le1b4:		ldy	noun_stk_l,x
 Se1bc:		lda	noun_stk_l+1,x
 		sta	aux
 		sec
-		sbc	#$02	; 2 .
+		sbc	#$02
 		sta	p2
 		lda	noun_stk_h_str+1,x
 		sta	aux+1
-		sbc	#$00	; 0 .
+		sbc	#$00
 		sta	p2+1
-		ldy	#$00	; 0 .
+		ldy	#$00
 		lda	(p2),y
 		clc
 		sbc	aux
@@ -421,7 +421,7 @@ string_eq:	lda	noun_stk_l+3,x
 		inx
 		inx
 		inx
-		ldy	#$00	; 0 .
+		ldy	#$00
 		sty	noun_stk_h_str,x
 		sty	noun_stk_h_int,x
 		iny
@@ -481,7 +481,7 @@ Le244:		lda	p3
 		bcc	Le279
 		jmp	negate
 
-Se254:		lda	#$55	; 85 U
+Se254:		lda	#$55
 		sta	p2+1
 		jsr	Se25b
 
@@ -498,27 +498,27 @@ Se25b:		lda	acc
 		asl	p2+1
 		jsr	negate
 		jsr	get16bit
-Le277:		ldy	#$10	; 16 .
+Le277:		ldy	#$10
 Le279:		rts
 
 mod_op:		jsr	See6c
 		beq	Le244	; hoepfully always taken
 		fcb	$ff	; hopefully unused
 
-Le280:		cmp	#$84	; 132 .
+Le280:		cmp	#$84
 		bne	Le286
 		lsr	auto_flag
-Le286:		cmp	#$df	; 223 _
+Le286:		cmp	#$df
 		beq	Le29b
-		cmp	#$9b	; 155 .
+		cmp	#$9b
 		beq	Le294
 		sta	buffer,y
 		iny
 		bpl	read_line
-Le294:		ldy	#$8b	; 139 .
+Le294:		ldy	#$8b
 		jsr	Se3c4
 
-Se299:		ldy	#$01	; 1 .
+Se299:		ldy	#$01
 Le29b:		dey
 		bmi	Le294
 
@@ -537,38 +537,38 @@ read_line:	jsr	rdkey
 cold:		jsr	mem_init_4k
 warm:		jsr	crout
 Le2b6:		lsr	run_flag
-		lda	#$be	; 190 >
+		lda	#$be
 		jsr	cout
-		ldy	#$00	; 0 .
+		ldy	#$00
 		sty	leadzr
 		bit	auto_flag
 		bpl	Le2d1
 		ldx	auto_ln
 		lda	auto_ln+1
 		jsr	prdec
-		lda	#$a0	; 160  
+		lda	#' '+$80
 		jsr	cout
-Le2d1:		ldx	#$ff	; 255 .
+Le2d1:		ldx	#$ff
 		txs
 		jsr	read_line
 		sty	token_index
 		txa
 		sta	text_index
-		ldx	#$20	; 32  
+		ldx	#$20
 		jsr	Se491
 		lda	text_index
-		adc	#$00	; 0 .
+		adc	#$00
 		sta	pverb
-		lda	#$00	; 0 .
+		lda	#$00
 		tax
-		adc	#$02	; 2 .
+		adc	#$02
 		sta	pverb+1
 		lda	(pverb,x)
-		and	#$f0	; 240 p
-		cmp	#$b0	; 176 0
+		and	#$f0
+		cmp	#$b0
 		beq	Le2f9
 		jmp	Le883
-Le2f9:		ldy	#$02	; 2 .
+Le2f9:		ldy	#$02
 Le2fb:		lda	(pverb),y
 		sta	pv+1,y
 		dey
@@ -576,14 +576,14 @@ Le2fb:		lda	(pverb),y
 		jsr	Se38a
 		lda	token_index
 		sbc	text_index
-		cmp	#$04	; 4 .
+		cmp	#$04
 		beq	Le2b6
 		sta	(pverb),y
 		lda	pp
 		sbc	(pverb),y
 		sta	p2
 		lda	pp+1
-		sbc	#$00	; 0 .
+		sbc	#$00
 		sta	p2+1
 		lda	p2
 		cmp	pv
@@ -594,7 +594,7 @@ Le326:		lda	pp
 		sbc	(pverb),y
 		sta	p3
 		lda	pp+1
-		sbc	#$00	; 0 .
+		sbc	#$00
 		sta	p3+1
 		lda	(pp),y
 		sta	(p3),y
@@ -701,7 +701,7 @@ Le3e5:		bmi	Le3ea
 Le3ea:		jmp	Leb9a
 
 Le3ed:		rol
-		adc	#$a0	; 160  
+		adc	#$a0
 		cmp	buffer,x
 		bne	Le448
 		lda	(synpag),y
@@ -714,13 +714,13 @@ Le3ed:		rol
 Le400:		stx	text_index
 		tya
 		pha
-		ldx	#$00	; 0 .
+		ldx	#$00
 		lda	(synpag,x)
 		tax
 Le409:		lsr
-		eor	#$48	; 72 H
+		eor	#$48
 		ora	(synpag),y
-		cmp	#$c0	; 192 @
+		cmp	#$c0
 		bcc	Le413
 		inx
 Le413:		iny
@@ -737,27 +737,27 @@ put_token:	inc	token_index
 Le425:		rts
 
 Le426:		ldx	text_index
-Le428:		lda	#$a0	; 160  
+Le428:		lda	#$a0
 Le42a:		inx
 		cmp	buffer,x
 		bcs	Le42a
 		lda	(synpag),y
-		and	#$3f	; 63 ?
+		and	#$3f
 		lsr
 		bne	Le3ed
 		lda	buffer,x
 		bcs	Le442
-		adc	#$3f	; 63 ?
-		cmp	#$1a	; 26 .
+		adc	#$3f
+		cmp	#$1a
 		bcc	Le4b1
-Le442:		adc	#$4f	; 79 O
-		cmp	#$0a	; 10 .
+Le442:		adc	#$4f
+		cmp	#$0a
 		bcc	Le4b1
 Le448:		ldx	synstkdx
 Le44a:		iny
 		lda	(synpag),y
-		and	#$e0	; 224 `
-		cmp	#$20	; 32  
+		and	#$e0
+		cmp	#$20
 		beq	Le4cd
 		lda	txtndxstk,x
 		sta	text_index
@@ -777,12 +777,13 @@ Le45b:		dey
 		inx
 		bpl	Le44a
 Le470:		beq	Le425
-		cmp	#$7e	; 126 ~
+		cmp	#$7e
 		bcs	Le498
 		dex
 		bpl	Le47d
 		ldy	#$06
-		bpl	go_errmess_2
+		bpl	go_errmess_2	; always taken
+
 
 Le47d:		sty	syn_stk_l,x
 		ldy	synpag+1
@@ -817,7 +818,7 @@ Le4a9:		cmp	#$03
 		inx
 Le4b1:		lda	buffer,x
 		bcc	Le4ba
-		cmp	#$a2	; 162 "
+		cmp	#'"'+$80
 		beq	Le4c4
 Le4ba:		cmp	#'_'+$80
 		beq	Le4c4
@@ -835,7 +836,7 @@ Le4cd:		ldy	syn_stk_h,x
 		ldy	syn_stk_l,x
 		inx
 		lda	(synpag),y
-		and	#$9f	; 159 .
+		and	#$9f
 		bne	Le4c7
 		sta	pcon
 		sta	pcon+1
@@ -845,12 +846,12 @@ Le4cd:		ldy	syn_stk_h,x
 		ldy	srch,x
 		sty	leadbl
 		clc
-Le4e7:		lda	#$0a	; 10 .
+Le4e7:		lda	#$0a
 		sta	char
-		ldx	#$00	; 0 .
+		ldx	#$00
 		iny
 		lda	buffer,y
-		and	#$0f	; 15 .
+		and	#$0f
 Le4f3:		adc	pcon
 		pha
 		txa
@@ -872,12 +873,12 @@ Le4f3:		adc	pcon
 		tay
 		lda	pcon+1
 		bcs	Le4c0
-Le517:		ldy	#$00	; 0 .
+Le517:		ldy	#$00
 		bpl	go_errmess_2
 
 prdec:		sta	pcon+1
 		stx	pcon
-		ldx	#$04	; 4 .
+		ldx	#$04
 		stx	leadbl
 Le523:		lda	#'0'+$80
 		sta	char
@@ -963,7 +964,7 @@ dectabh:	fcb	$00,$00,$00,$03,$27
 	 	sta	pv
 	 	lda	lomem+1
 	 	sta	pv+1
-	 	lda	#$00	; 0 .
+	 	lda	#$00
 	 	sta	for_nest_count
 	 	sta	gosub_nest_count
 	 	sta	synpag
@@ -1081,7 +1082,7 @@ Le696:		bit	if_flag
 	 	dex
 Le69b:		jsr	get_next_prog_byte
  		bcs	Le686
-execute_token:	cmp	#$28	; 40 (
+execute_token:	cmp	#$28
 	 	bne	execute_verb
 	 	lda	pverb
 	 	jsr	push_a_noun_stk
@@ -1105,13 +1106,13 @@ execute_verb:	bit	if_flag
 Le6cd:		tay
 		sta	current_verb
 	 	lda	verb_prec_tbl,y
-	 	and	#$55	; 85 U
+	 	and	#$55
 	 	asl
 	 	sta	precedence
 Le6d8:		pla
 	 	tay
 	 	lda	verb_prec_tbl,y
-	 	and	#$aa	; 170 *
+	 	and	#$aa
 	 	cmp	precedence
 	 	bcs	do_verb
 	 	tya
@@ -1147,7 +1148,7 @@ push_a_noun_stk:
 Le710:		ldy	#erri_stopped_at+3	; The "+3" is a bug!
 go_errmess_3:	jmp	do_error
 
-get16bit:	ldy	#$00	; 0 .
+get16bit:	ldy	#$00
 	 	lda	noun_stk_l,x
 	 	sta	acc
 	 	lda	noun_stk_h_int,x
@@ -1193,7 +1194,7 @@ sgn_fn:		jsr	get16bit
 	 	bne	Le764
 	 	lda	acc
 	 	beq	Le757
-Le764:		lda	#$ff	; 255 .
+Le764:		lda	#$ff
 	 	jsr	push_ya_noun_stk
 	 	sta	noun_stk_h_int,x
 	 	bit	acc+1
@@ -1208,7 +1209,7 @@ Se772:		tya
 	 	tya
 	 	sbc	acc+1
 	 	bvc	Le7a1
-Le77e:		ldy	#$00	; 0 .
+Le77e:		ldy	#$00
 	 	bpl	go_errmess_3
 
 subtract:	jsr	negate
@@ -1274,7 +1275,7 @@ auto_cmd:	jsr	get16bit
 	 	dey
 	 	sty	auto_flag
 	 	iny
-	 	lda	#$0a	; 10 .
+	 	lda	#$0a
 Le7f3:		sta	auto_inc
 	 	sty	auto_inc+1
 	 	rts
@@ -1309,14 +1310,14 @@ print_cr:	jsr	crout
 print_semi:	lsr	cr_flag
 Le822:		rts
 
-left_paren:	ldy	#$ff	; 255 .
+left_paren:	ldy	#$ff
 	 	sty	precedence
 
 right_paren:	rts
 
 if_stmt:	jsr	Sefcd
 	 	beq	Le834
-	 	lda	#$25	; 37 %
+	 	lda	#$25
 	 	sta	current_verb
 	 	dey
 	 	sty	if_flag
@@ -1327,7 +1328,7 @@ run_warm:	lda	pp
 	 	ldy	pp+1
 	 	bne	Le896
 
-gosub_stmt:	ldy	#$41	; 65 A
+gosub_stmt:	ldy	#$41
 	 	lda	gosub_nest_count
 	 	cmp	#8
 	 	bcs	go_errmess_4
@@ -1345,7 +1346,7 @@ gosub_stmt:	ldy	#$41	; 65 A
 goto_stmt:	jsr	get16bit
 	 	jsr	find_line
 	 	bcc	Le867
-	 	ldy	#$37	; 55 7
+	 	ldy	#$37
 	 	bne	go_errmess_4
 Le867:		lda	p2
 	 	ldy	p2+1
@@ -1357,7 +1358,7 @@ run_loop:	sta	pline
 	 	adc	#$03
 	 	bcc	Le87a
 	 	iny
-Le87a:		ldx	#$ff	; 255 .
+Le87a:		ldx	#$ff
 	 	stx	run_flag
 	 	txs
 	 	sta	pverb
@@ -1366,7 +1367,7 @@ Le883:		jsr	execute_stmt
 	 	bit	run_flag
 	 	bpl	end_stmt
 	 	clc
-	 	ldy	#$00	; 0 .
+	 	ldy	#$00
 	 	lda	pline
 	 	adc	(pline),y
 	 	ldy	pline+1
@@ -1380,7 +1381,7 @@ Le896:		cmp	himem
 	 	lsr	run_flag
 go_errmess_4:	jmp	do_error
 
-return_stmt:	ldy	#$4a	; 74 J
+return_stmt:	ldy	#$4a
 	 	lda	gosub_nest_count
 	 	beq	go_errmess_4
 	 	dec	gosub_nest_count
@@ -1398,7 +1399,7 @@ Le8be:		tay
 	 	txa
 	 	jmp	Le87a
 
-Le8c3:		ldy	#$63	; 99 c
+Le8c3:		ldy	#$63
 	 	jsr	Se3c4
 	 	ldy	#$01
 	 	lda	(pline),y
@@ -1433,7 +1434,7 @@ Le8dc:		beq	go_errmess_4
 		lda	fstk_toh-1,y
 	 	sta	syn_stk_l+31,x
 	 	lda	fstk_tol-1,y
-	 	ldy	#$00	; 0 .
+	 	ldy	#$00
 	 	jsr	push_ya_noun_stk
 	 	jsr	subtract
 	 	jsr	sgn_fn
@@ -1455,7 +1456,7 @@ Le937:		dec	for_nest_count
 
 for_stmt:	ldy	#erri_too_many_fors
 	 	lda	for_nest_count
-	 	cmp	#$08	; 8 .
+	 	cmp	#$08
 	 	beq	Le8dc
 	 	inc	for_nest_count
 	 	tay
@@ -1697,22 +1698,22 @@ Leb9a:		lsr	run_flag
 Leba1:		ldx	acc+1
 		txs
 		ldx	acc
-		ldy	#$8d	; 141 .
+		ldy	#$8d
 		bne	Lebac
 
-input_num_stmt:	ldy	#$99	; 153 .
+input_num_stmt:	ldy	#$99
 Lebac:		jsr	Se3c4
 		stx	acc
 		tsx
 		stx	acc+1
-		ldy	#$fe	; 254 ~
+		ldy	#$fe
 		sty	run_flag
 		iny
 		sty	text_index
 		jsr	Se299
 		sty	token_index
-		ldx	#$20	; 32  
-		lda	#$30	; 48 0
+		ldx	#$20
+		lda	#$30
 		jsr	Se491
 		inc	run_flag
 		ldx	acc
@@ -1722,10 +1723,10 @@ input_num_comma:	ldy	text_index
 Lebce:		sta	acc
 		iny
 		lda	buffer,y
-		cmp	#$74	; 116 t
+		cmp	#$74
 		beq	input_num_stmt
-		eor	#$b0	; 176 0
-		cmp	#$0a	; 10 .
+		eor	#$b0
+		cmp	#$0a
 		bcs	Lebce
 		iny
 		iny
@@ -1738,7 +1739,7 @@ Lebce:		sta	acc
 		pla
 		sta	noun_stk_h_int,x
 		lda	acc
-		cmp	#$c7	; 199 G
+		cmp	#$c7
 		bne	Lebfa
 		jsr	negate
 Lebfa:		jmp	var_assign
@@ -2231,7 +2232,7 @@ Lee1d:		lda	#$ff
 		rts
 
 len_fn:		inx
-		lda	#$00	; 0 .
+		lda	#$00
 		sta	noun_stk_h_str,x
 		sta	noun_stk_h_int,x
 		lda	syn_stk_h+31,x
@@ -2250,9 +2251,9 @@ getbyte:	jsr	get16bit
 
 plot_comma:	jsr	getbyte
 		ldy	text_index
-		cmp	#$30	; 48 0
+		cmp	#$30
 		bcs	range_err
-		cpy	#$28	; 40 (
+		cpy	#$28
 		bcs	range_err
 		rts
 
@@ -2269,7 +2270,7 @@ man_cmd:	lsr	auto_flag
 		rts
 
 vtab_stmt:	jsr	getbyte
-		cmp	#$18	; 24 .
+		cmp	#$18
 		bcs	range_err
 		sta	cv
 		rts
@@ -2332,7 +2333,7 @@ Teebc:		pha
 		fcb	$a5,$85,$2d,$60
 
 Teec6:		jsr	getbyte
-		cmp	#$28	; 40 (
+		cmp	#$28
 Leecb:		bcs	range_err
 		tay
 		lda	text_index
@@ -2343,12 +2344,12 @@ Leecb:		bcs	range_err
 
 print_err_msg:	tya
 		tax
-		ldy	#$6e	; 110 n
+		ldy	#$6e
 		jsr	Se3c4
 		txa
 		tay
 		jsr	Se3c4
-		ldy	#$72	; 114 r
+		ldy	#$72
 		jmp	Se3c4
 
 Seee4:		jsr	get16bit
@@ -2390,7 +2391,7 @@ dim_num:	jsr	Seee4
 num_array_subs:	jsr	Seee4
 		ldy	noun_stk_h_str,x
 		lda	noun_stk_l,x
-		adc	#$fe	; 254 ~
+		adc	#$fe
 		bcs	Lef30
 		dey
 Lef30:		sta	aux
@@ -2401,7 +2402,7 @@ Lef30:		sta	aux
 		tya
 		adc	acc+1
 		sta	noun_stk_h_str,x
-		ldy	#$00	; 0 .
+		ldy	#$00
 		lda	noun_stk_l,x
 		cmp	(aux),y
 		iny
@@ -2420,11 +2421,11 @@ rnd_fn:		jsr	get16bit
 Lef5e:		and	#$7f
 		sta	rnd+1
 		sta	noun_stk_h_int,x
-		ldy	#$11	; 17 .
+		ldy	#$11
 Lef66:		lda	rnd+1
 		asl
 		clc
-		adc	#$40	; 64 @
+		adc	#$40
 		asl
 		rol	rnd
 		rol	rnd+1
@@ -2467,9 +2468,9 @@ string_input:	jsr	input_str
 		jmp	Lefbf
 
 input_prompt:	jsr	print_str
-Lefbf:		lda	#$ff	; 255 .
+Lefbf:		lda	#$ff
 		sta	text_index
-		lda	#$74	; 116 t
+		lda	#$74
 		sta	buffer
 		rts
 
@@ -2483,7 +2484,7 @@ Sefcd:		jsr	not_op
 mem_init_4k:	lda	#$00
 		sta	lomem
 		sta	himem
-		lda	#$08	; 8 .
+		lda	#$08
 		sta	lomem+1
 		lda	#$10
 		sta	himem+1
