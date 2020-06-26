@@ -1550,7 +1550,7 @@ verb_addr_h:	rmb	$78
 		verb	$2f,$cf,$ef4e		; RND
 		verb	$30,$cf,$e759		; SGN
 		verb	$31,$cf,$e750		; ABS
-		verb	$32,$cf,$0000
+		verb	$32,$cf,$0000		; USR
 		verb	$33,$ff,$ffff
 		verb	$34,$55,$e823		; ( used in variable DIM
 		verb	$35,$c3,$e7a3		; unary +
@@ -1807,17 +1807,18 @@ Lec4c:		sta	noun_stk_l,x
 		jmp	Sefc9
 
 ; syntax tables
-		fcb	$40
+		fcb	$40		; cat 00, end of category
 
-		fcb	$60	; unsigned integer, end of rule
+		fcb	$60		; unsigned integer, end of rule
 		synstr	"-"
 syn_cat_13:
 
-		fcb	$60
-		fcb	$8b
+		fcb	$60		; cat 00, end of rule
+		synstr	"+"
 
 		fcb	$00
-		fcb	$7e
+
+		fcb	$7e		; branch "backward" two bytes
 		synstr	","
 		fcb	$33
 syn_cat_12:
@@ -1825,84 +1826,85 @@ syn_cat_12:
 		fcb	$00
 		fcb	$00
 
-		fcb	$60
-		fcb	$03
-		fcb	$bf
+		fcb	$60		; cat 00, end of rule
+		fcb	$03		; string literal
+		synstr	"_"
 		fcb	$12
-		fcb	$00
+
+		fcb	$00		; return with syntax error
 		fcb	$40
 		synstr	")"
 syn_cat_11:
 
-		fcb	$c9
+		synstr1	")"
 
 		fcb	$47
 		synstr	"="
+		fcb	$17
 syn_cat_18:
 
-		fcb	$17
-
 		fcb	$68
-		fcb	$9d
+		synstr	"="
 		fcb	$0a
-		fcb	$00
+
+		fcb	$00		; return with syntax error
 		fcb	$40
 
 		fcb	$60
-		fcb	$8d
+		synstr	"-"
 
 		fcb	$60
-		fcb	$8b
+		synstr	"+"
 
-		fcb	$00
-		fcb	$7e
+		fcb	$00		; return with syntax error
+		fcb	$7e		; branch "backward" two bytes
 		synstr	","
 		fcb	$3c
 
 		fcb	$00
-		fcb	$00
+
+		fcb	$00		; return with syntax error
 
 		fcb	$60
-		fcb	$03
-		fcb	$bf
+		fcb	$03		; string literal
+		synstr	"_"
 		fcb	$1b
 		fcb	$4b
 
-		fcb	$67		; numeric expression, ned of rule
+		fcb	$67		; numeric expression, end of rule
 		synstr	"AT"
 		fcb	$07		; numeric expression
 		synstr	","
 		fcb	$07		; numeric expression
 		synstr	"HLIN"
 
-		fcb	$67		; numeric expression, ned of rule
+		fcb	$67		; numeric expression, end of rule
 		synstr	","
 		fcb	$07		; numeric expression
 		synstr	"PLOT"
 
-		fcb	$67		; numeric expression, ned of rule
-		fcb	$9d
-		synstr	"COLOR"
+		fcb	$67		; numeric expression, end of rule
+		synstr	"COLOR="
 
-		fcb	$67		; numeric expression, ned of rule
+		fcb	$67		; numeric expression, end of rule
 		synstr	","
 		fcb	$07		; numeric expression
 		synstr	"POKE"
 
 		synstr1	"PRINT"
 
-		fcb	$7f
+		fcb	$7f		; branch "backward" one byte
 		fcb	$0e
 		fcb	$27
 		synstr	"PRINT"
 
-		fcb	$7f
+		fcb	$7f		; branch "backward" one byte
 		fcb	$0e
 		fcb	$28
 		synstr	"PRINT"
 
 		fcb	$64
-		fcb	$07
+		fcb	$07		; numeric expressoin
 		synstr	"IF"
 
 		fcb	$67
@@ -1917,38 +1919,36 @@ syn_cat_18:
 		synstr	"REM"
 syn_cat_1a:
 
-		fcb	$67
+		fcb	$67		; numeric expression, end of rule
 		synstr	"GOSUB"
 
 		synstr1	"RETURN"
 
-		fcb	$7e
+		fcb	$7e		; branch "backward" two bytes
 		synstr	","
 		fcb	$39
 		synstr	"NEXT"
 
-		fcb	$67
+		fcb	$67		; numeric expression, end of rule
 		synstr	"STEP"
-
-		fcb	$27
+		fcb	$27		; numeric expression, rest optional
 		synstr	"TO"
-
-		fcb	$07
-		fcb	$9d
+		fcb	$07		; numeric expression
+		synstr	"="
 		fcb	$19
 		synstr	"FOR"
 
-		fcb	$7f
+		fcb	$7f		; branch "backward" one byte
 		fcb	$05
 		fcb	$37
 		synstr	"INPUT"
 
-		fcb	$7f
+		fcb	$7f		; branch "backward" one byte
 		fcb	$05
 		fcb	$28
 		synstr	"INPUT"
 
-		fcb	$7f
+		fcb	$7f		; branch "backward" one byte
 		fcb	$05
 		fcb	$2a
 		synstr	"INPUT"
@@ -1960,15 +1960,15 @@ syn_cat_02:
 		fcb	$ff
 		fcb	$ff
 
-		fcb	$47
+		fcb	$47		; numeric expression, end of category
 		synstr	"TAB"
 
-		fcb	$7f
+		fcb	$7f		; branch "backward" one byte
 		fcb	$0d
 		fcb	$30
 		synstr	"DIM"
 
-		fcb	$7f		; branch "backward" 1 byte
+		fcb	$7f		; branch "backward" one byte
 		fcb	$0d		; category 0d, required
 		fcb	$23		; category 03, optional
 		synstr	"DIM"
@@ -1978,33 +1978,36 @@ syn_cat_02:
 syn_cat_0b:
 
 		fcb	$00
-		fcb	$40
-		fcb	$80
+
+		fcb	$40		; unsigned integer, end of category
+		fcb	$80		; letter A-Z
 syn_cat_19:
 
 		fcb	$c0
 		fcb	$c1
 		fcb	$80
 		fcb	$00
-		fcb	$47
-		fcb	$8c
+
+		fcb	$47		; numeric expression, end of category
+		synstr	","
 		fcb	$68
-		fcb	$8c
+		synstr	","
 		fcb	$db
-		fcb	$67
-		fcb	$9b
+
+		fcb	$67		; numeric expression, end of rule
+		synstr	";"
 		fcb	$68
-		fcb	$9b
+		synstr	";"
 syn_cat_0e:
 
 		fcb	$50
-		fcb	$8c
+		synstr	","
 		fcb	$63
 		synstr	","
 syn_cat_0d:
 
-		fcb	$7f
-		fcb	$01
+		fcb	$7f		; branch "backward" one byte
+		fcb	$01		; return with no error
 syn_cat_0c:
 
 		fcb	$51
@@ -2040,20 +2043,23 @@ syn_cat_09:
 		fcb	$08
 
 		fcb	$68
-		fcb	$9d
+		synstr	"="
 		fcb	$08
-		fcb	$71
-		fcb	$07		; numeric expressoin
+
+		fcb	$71		; cat 11, end of rule
+		fcb	$07		; numeric expression
 		synstr	"("
 syn_cat_16:
 
-		fcb	$60
-		fcb	$76
+		fcb	$60		; cat 00, end of rule
+
+		fcb	$76		; cat 16, end of rule
 		synstr	"NOT"
 
-		fcb	$76
-		fcb	$8d
-		fcb	$76
+		fcb	$76		; cat 16, end of rule
+		synstr	"-"
+
+		fcb	$76		; cat 16, end of rule
 		synstr	"+"
 syn_cat_15:
 
@@ -2189,7 +2195,7 @@ syn_cat_1e:
 		synstr	"LIST"
 
 		fcb	$7a
-		fcb	$7e
+		fcb	$7e		; branch "backward" two bytes
 		fcb	$9a
 		fcb	$22
 		fcb	$20		; (optional) unsigned integer
@@ -2197,7 +2203,7 @@ syn_cat_1f:
 
 		fcb	$00
 		fcb	$60
-		fcb	$03
+		fcb	$03		; string literal
 		fcb	$bf
 		fcb	$60
 		fcb	$03
