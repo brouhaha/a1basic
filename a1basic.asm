@@ -23,11 +23,20 @@ errstr	macro	arg
 
 synstr	macro	arg
 i	set	strlen(arg)
-        while	i > 1
+        while	i > 0
 i	set	i-1
-        fcb	charfromstr(arg, i)-$20
+        fcb	charfromstr(arg, i)+$60
         endm
-	fcb	charfromstr(arg, i)+$20
+	endm
+
+synstr1	macro	arg
+i	set	strlen(arg)
+i	set	i-1
+        fcb	charfromstr(arg, i)+$a0
+        while	i > 0
+i	set	i-1
+        fcb	charfromstr(arg, i)+$60
+        endm
 	endm
 
 
@@ -1800,16 +1809,18 @@ Lec4c:		sta	noun_stk_l,x
 		fcb	$40
 		fcb	$60
 		fcb	$8d
+
 		fcb	$60
 		fcb	$8b
 
 		fcb	$00
-		fcb	$7e,$8c
+		fcb	$7e
+		fcb	$8c
 		fcb	$33
 
 		fcb	$00
-
 		fcb	$00
+
 		fcb	$60
 		fcb	$03
 		fcb	$bf
@@ -1819,152 +1830,162 @@ Lec4c:		sta	noun_stk_l,x
 		fcb	$89,$c9,$47,$9d,$17,$68
 		fcb	$9d
 		fcb	$0a,$00,$40
-		fcb	$60,$8d
-		fcb	$60,$8b
 
-		fcb	$00
-		fcb	$7e,$8c,$3c
-
-		fcb	$00
-
-		fcb	$00
 		fcb	$60
-		fcb	$03,$bf
-		fcb	$1b,$4b,$67
-		fcb	$b4,$a1					; AT
+		fcb	$8d
+
+		fcb	$60
+		fcb	$8b
+
+		fcb	$00
+		fcb	$7e
+		fcb	$8c
+		fcb	$3c
+
+		fcb	$00
+		fcb	$00
+
+		fcb	$60
+		fcb	$03
+		fcb	$bf
+		fcb	$1b
+		fcb	$4b
+		fcb	$67
+		synstr	"AT"
 		fcb	$07,$8c,$07
-		fcb	$ae,$a9,$ac,$a8				; HLIN
+		synstr	"HLIN"
 		fcb	$67,$8c,$07
-		fcb	$b4,$af,$ac,$b0				; PLOT
+		synstr	"PLOT"
 		fcb	$67,$9d
-		fcb	$b2,$af,$ac,$af,$a3			; COLOR
+		synstr	"COLOR"
 		fcb	$67,$8c,$07
-		fcb	$a5,$ab,$af,$b0				; POKE
-		fcb	$f4,$ae,$a9,$b2,$b0			; PRINT
+		synstr	"POKE"
+		synstr1	"PRINT"
 		fcb	$7f,$0e
 		fcb	$27
-		fcb	$b4,$ae,$a9,$b2,$b0			; PRITN
+		synstr	"PRINT"
 		fcb	$7f,$0e
 		fcb	$28
-		fcb	$b4,$ae,$a9,$b2,$b0			; PRINT
+		synstr	"PRINT"
 		fcb	$64,$07
-		fcb	$a6,$a9					; IF
+		synstr	"IF"
 		fcb	$67
-		fcb	$af,$b4,$af,$a7				; GOTO
+		synstr	"GOTO"
 		fcb	$78
-		fcb	$b4,$a5,$ac				; LET
+		synstr	"LET"
 		fcb	$78,$7f,$02
-		fcb	$ad,$a5,$b2				; REM
+		synstr	"REM"
 		fcb	$67
-		fcb	$a2,$b5,$b3,$af,$a7			; GOSUB
-		fcb	$ee,$b2,$b5,$b4,$a5,$b2			; RETURN
+		synstr	"GOSUB"
+		synstr1	"RETURN"
 		fcb	$7e,$8c,$39
-		fcb	$b4,$b8,$a5,$ae				; NEXT
+		synstr	"NEXT"
 		fcb	$67
-		fcb	$b0,$a5,$b4,$b3				; STEP
+		synstr	"STEP"
 		fcb	$27
-		fcb	$af,$b4					; TO
+		synstr	"TO"
 		fcb	$07,$9d,$19
-		fcb	$b2,$af,$a6				; FOR
+		synstr	"FOR"
 		fcb	$7f,$05,$37
-		fcb	$b4,$b5,$b0,$ae,$a9			; INPUT
+		synstr	"INPUT"
 		fcb	$7f,$05,$28
-		fcb	$b4,$b5,$b0,$ae,$a9			; INPUT
+		synstr	"INPUT"
 		fcb	$7f,$05,$2a
-		fcb	$b4,$b5,$b0,$ae,$a9			; INPUT
-		fcb	$e4,$ae,$a5				; END
+		synstr	"INPUT"
+		synstr1	"END"
 		fcb	$00
 		fcb	$ff,$ff
 
 syntabl2:	fcb	$47
-		fcb	$a2,$a1,$b4				; TAB
+		synstr	"TAB"
 		fcb	$7f,$0d,$30
-		fcb	$ad,$a9,$a4				; DIM
+		synstr	"DIM"
 		fcb	$7f,$0d,$23
-		fcb	$ad,$a9,$a4				; DIM
+		synstr	"DIM"
 		fcb	$67
-		fcb	$ac,$ac,$a1,$a3				; CALL
+		synstr	"CALL"
 		fcb	$00,$40,$80
 		fcb	$c0,$c1,$80,$00,$47,$8c,$68,$8c
 		fcb	$db,$67,$9b,$68,$9b,$50,$8c,$63
 		fcb	$8c,$7f,$01,$51,$07,$88,$29,$84
 		fcb	$80,$c4,$80,$57,$71,$07,$88,$14
-		fcb	$ed,$a5,$ad,$af,$ac			; LOMEM
+		synstr1	"LOMEM"
 		fcb	$ed,$a5,$ad
 		fcb	$a9,$a8
-		fcb	$f2,$af,$ac,$af,$a3			; COLOR
+		synstr1	"COLOR"
 		fcb	$71
 		fcb	$08,$88,$ae,$a5,$ac,$68,$83,$08
 		fcb	$68,$9d,$08,$71,$07,$88,$60,$76
-		fcb	$b4,$af,$ae				; NOT
+		synstr	"NOT"
 		fcb	$76,$8d,$76,$8b,$51
 		fcb	$07,$88,$19,$b8
-		fcb	$a4,$ae,$b2				; RND
+		synstr	"RND"
 		fcb	$f2
 		fcb	$b3,$b5,$f3,$a2,$a1,$ee,$a7,$b3
-		fcb	$e4,$ae,$b2				; RND
-		fcb	$eb,$a5,$a5,$b0				; PEEK
+		synstr1	"RND"
+		synstr1	"PEEK"
 		fcb	$51
 		fcb	$07,$88,$39,$81,$c1,$4f,$7f,$0f
 		fcb	$2f,$00,$51,$06,$88,$29,$c2,$0c
 		fcb	$82,$57,$8c,$6a,$8c,$42
-		fcb	$ae,$a5,$a8,$b4				; THEN
+		synstr	"THEN"
 		fcb	$60
-		fcb	$ae,$a5,$a8,$b4				; THEN
+		synstr	"THEN"
 		fcb	$4f
 		fcb	$7e,$1e,$35,$8c,$27,$51,$07,$88
 		fcb	$09,$8b,$fe
 
-		fcb	$e4,$af,$ad				; MOD
-		fcb	$f2,$af					; OR
-		fcb	$e4,$ae,$a1				; AND
-		fcb	'<'+$a0
-		fcb	'>'+$a0,'<'+$60
-		fcb	'='+$a0,'<'+$60
-		fcb	'>'+$a0
-		fcb	'='+$a0,'>'+$60
-		fcb	'#'+$a0
-		fcb	'='+$a0
-		fcb	'/'+$a0
-		fcb	'*'+$a0
-		fcb	'-'+$a0
-		fcb	'+'+$a0
+		synstr1	"MOD"
+		synstr1	"OR"
+		synstr1	"AND"
+		synstr1	"<"
+		synstr1	"<>"
+		synstr1	"<="
+		synstr1	">"
+		synstr1	">="
+		synstr1	"#"
+		synstr1	"="
+		synstr1	"/"
+		synstr1	"*"
+		synstr1	"-"
+		synstr1	"+"
 
 		fcb	$00
 
 		fcb	$47
-		fcb	$9d,$ad,$a5,$ad,$af,$ac			; LOMEM:
+		fcb	$9d
+		synstr	"LOMEM"
 
 		fcb	$76
-		fcb	$9d,$ad,$a5,$ad,$a9,$a8			; HIMEM:
+		fcb	$9d
+		synstr	"HIMEM"
 
-		fcb	$e6,$a6,$af				; OFF
-
-		fcb	$60
-		fcb	$8c					; ,
-		fcb	$20
-		fcb	$af,$b4,$b5,$a1				; AUTO
-
-		fcb	$f2,$ac,$a3				; CLR
-
-		fcb	$f2,$a3,$b3				; SCR
-
-		fcb	$60
-		fcb	$8c					; ,
-		fcb	$20
-		fcb	$ac,$a5,$a4				; DEL
-
-		fcb	$ee,$b5,$b2
+		synstr1	"OFF"
 
 		fcb	$60					; end of rule
-		fcb	$ae,$b5,$b2				; RUN
+		fcb	$8c					; ,
+		fcb	$20
+		synstr	"AUTO"
 
-		fcb	$f4,$b3,$a9,$ac				; LIST
+		synstr1	"CLR"
+		synstr1	"SCR"
+
+		fcb	$60					; end of rule
+		fcb	$8c					; ,
+		fcb	$20
+		synstr	"DEL"
+
+		synstr1	"RUN"
+
+		fcb	$60					; end of rule
+		synstr	"RUN"
+
+		synstr1	"LIST"
 
 		fcb	$60					; end of rule
 		fcb	$8c					; , (for LIST)
 		fcb	$20					; next token optional
-		fcb	$b4,$b3,$a9,$ac				; LIST
+		synstr	"LIST"
 
 		fcb	$7a,$7e,$9a,$22,$20
 
