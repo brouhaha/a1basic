@@ -1297,7 +1297,9 @@ var_assign:	jsr	get16bit
 	 	sta	(aux),y
 	 	inx
 
-Te816:		rts
+null_stmt:	rts		; used to execute LET keyword or colon
+				; (statement separator), which need no
+				; processing
 
 begin_line:	pla
 	 	pla
@@ -1538,7 +1540,7 @@ verb_addr_h:	rmb	$78
 		verb	$22,$55,$e823		; ( used in string DIM
 		verb	$23,$00,$e109		; ,
 		verb	$24,$ab,$e85b		; THEN followed by a line number
-		verb	$25,$ab,$e816		; THEN followed by a statement
+		verb	$25,$ab,null_stmt	; THEN followed by a statement
 		verb	$26,$03,$efb6		; , used in string INPUT
 		verb	$27,$03,$ebcb		; , used in numeric input
 		verb	$28,$ff,$ffff
@@ -1595,7 +1597,7 @@ verb_addr_h:	rmb	$78
 		verb	$5b,$03,return_stmt	; RETURN
 		verb	$5c,$03,gosub_stmt	; GOSUB
 		verb	$5d,$00,$ffff		; REM
-		verb	$5e,$ab,$e816		; LET
+		verb	$5e,$ab,null_stmt	; LET
 		verb	$5f,$03,goto_stmt	; GOTO
 		verb	$60,$57,if_stmt		; IF
 		verb	$61,$03,print_str	; PRINT string
