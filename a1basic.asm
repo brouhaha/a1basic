@@ -1,8 +1,13 @@
 ; Disassembly of Apple 1 BASIC
+
 ; Apple 1 BASIC was written by Steve Wozniak
+
 ; This disassembly is copyright 2003, 2019 Eric Smith <spacewar@gmail.com>
 ; Includes some updates by Jeff Tranter <tranter@pobox.com>
 
+; Cross-assembles on modern systems using the Macro Assembler AS
+; by Alfred Arnold:
+;    http://john.ccac.rwth-aachen.de:8000/as/
 
 	cpu	6502
 
