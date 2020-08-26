@@ -461,7 +461,7 @@ Le206:		tay
 string_neq:	jsr	string_eq
 		jmp	not_op
 
-mult_op:	jsr	Se254
+multiply_op:	jsr	Se254
 Le225:		asl	acc
 		rol	acc+1
 		bcc	Le238
@@ -965,7 +965,7 @@ dectabh:	fcb	$00,$00,$00,$03,$27
 	 	lda	himem+1
 	 	sta	pp+1
 
- clr:		lda	lomem
+ clr_cmd:	lda	lomem
 	 	sta	pv
 	 	lda	lomem+1
 	 	sta	pv+1
@@ -1185,7 +1185,7 @@ not_op:		jsr	get16bit
 	 	inc	noun_stk_l,x
 Le749:		rts
 
-neq_op:		jsr	subtract
+neq_op:		jsr	subtract_op
 	 	jsr	sgn_fn
 
 abs_fn:		jsr	get16bit
@@ -1217,9 +1217,9 @@ Se772:		tya
 Le77e:		ldy	#$00
 	 	bpl	go_errmess_3
 
-subtract:	jsr	negate
+subtract_op:	jsr	negate
 
-add:		jsr	get16bit
+add_op:		jsr	get16bit
 	 	lda	acc
 	 	sta	aux
 	 	lda	acc+1
@@ -1285,7 +1285,7 @@ Le7f3:		sta	auto_inc
 	 	sty	auto_inc+1
 	 	rts
 
-auto_com:	jsr	get16bit
+auto_comma:	jsr	get16bit
 	 	lda	acc
 	 	ldy	acc+1
 	 	bpl	Le7f3
@@ -1443,7 +1443,7 @@ Le8dc:		beq	go_errmess_4
 	 	lda	fstk_tol-1,y
 	 	ldy	#$00
 	 	jsr	push_ya_noun_stk
-	 	jsr	subtract
+	 	jsr	subtract_op
 	 	jsr	sgn_fn
 	 	jsr	get16bit
 	 	ldy	for_nest_count
@@ -1515,62 +1515,62 @@ verb_addr_h:	rmb	$78
 		verb	$04,$03,list_cmd
 		verb	$05,$03,list_comman
 		verb	$06,$03,list_all
-		verb	$07,$03,Teff2		; RUN w/ line #
-		verb	$08,$03,$efec		; RUN w/o line #
-		verb	$09,$03,$e387		; DEL
-		verb	$0a,$03,$e36f		; comma used with DEL
-		verb	$0b,$03,$e5ad		; SCR (New)
-		verb	$0c,$03,$e5b7		; CLR
-		verb	$0d,$03,$e7e2		; AUTO
-		verb	$0e,$03,$e7f8		; comma used with AUTO
-		verb	$0f,$03,$ee54		; MAN
-		verb	$10,$03,$ef80		; HIMEM:
-		verb	$11,$03,$ef96		; LOMEM:
-		verb	$12,$3f,$e785		; +
-		verb	$13,$3f,$e782		; -
-		verb	$14,$c0,$e222		; *
-		verb	$15,$c0,$ef10		; /
-		verb	$16,$3c,$e733		; =
-		verb	$17,$3c,$e74a		; #
-		verb	$18,$3c,$ec13		; >=
-		verb	$19,$3c,$ec06		; >
-		verb	$1a,$3c,$ec0b		; <=
-		verb	$1b,$3c,$e74a		; <>
-		verb	$1c,$3c,$ec01		; <
-		verb	$1d,$30,$ec40		; AND
-		verb	$1e,$0f,$ec47		; OR
-		verb	$1f,$c0,$e27a		; MOD
+		verb	$07,$03,run_cmd_w_lno	; RUN w/ line #
+		verb	$08,$03,run_cmd		; RUN w/o line #
+		verb	$09,$03,del_cmd		; DEL
+		verb	$0a,$03,del_comma	; comma used with DEL
+		verb	$0b,$03,new_cmd		; SCR (New)
+		verb	$0c,$03,clr_cmd		; CLR
+		verb	$0d,$03,auto_cmd	; AUTO
+		verb	$0e,$03,auto_comma	; comma used with AUTO
+		verb	$0f,$03,man_cmd		; MAN
+		verb	$10,$03,himem_cmd	; HIMEM:
+		verb	$11,$03,lomem_cmd	; LOMEM:
+		verb	$12,$3f,add_op		; +
+		verb	$13,$3f,subtract_op	; -
+		verb	$14,$c0,multiply_op	; *
+		verb	$15,$c0,divide_op	; /
+		verb	$16,$3c,eq_op		; =
+		verb	$17,$3c,neq_op		; #
+		verb	$18,$3c,gt_eq_op	; >=
+		verb	$19,$3c,gt_op		; >
+		verb	$1a,$3c,lt_eq_op	; <=
+		verb	$1b,$3c,neq_op		; <>
+		verb	$1c,$3c,lt_op		; <
+		verb	$1d,$30,and_op		; AND
+		verb	$1e,$0f,or_op		; OR
+		verb	$1f,$c0,mod_op		; MOD
 		verb	$20,$cc,$0000
 		verb	$21,$ff,$ffff
-		verb	$22,$55,$e823		; ( used in string DIM
-		verb	$23,$00,$e109		; ,
-		verb	$24,$ab,$e85b		; THEN followed by a line number
+		verb	$22,$55,left_paren	; ( used in string DIM
+		verb	$23,$00,comma_substr	; ,
+		verb	$24,$ab,goto_stmt	; THEN followed by a line number
 		verb	$25,$ab,null_stmt	; THEN followed by a statement
-		verb	$26,$03,$efb6		; , used in string INPUT
-		verb	$27,$03,$ebcb		; , used in numeric input
+		verb	$26,$03,string_input	; , used in string INPUT
+		verb	$27,$03,input_num_comma	; , used in numeric input
 		verb	$28,$ff,$ffff
 		verb	$29,$ff,$ffff
-		verb	$2a,$55,$e0fb		; ( substring
+		verb	$2a,$55,paren_substr	; ( substring
 		verb	$2b,$ff,$ffff
 		verb	$2c,$ff,$ffff
-		verb	$2d,$55,$ef24		; ( variable array subscript
-		verb	$2e,$cf,$eef6		; PEEK
-		verb	$2f,$cf,$ef4e		; RND
-		verb	$30,$cf,$e759		; SGN
-		verb	$31,$cf,$e750		; ABS
+		verb	$2d,$55,num_array_subs	; ( variable array subscript
+		verb	$2e,$cf,peek_fn		; PEEK
+		verb	$2f,$cf,rnd_fn		; RND
+		verb	$30,$cf,sgn_fn		; SGN
+		verb	$31,$cf,abs_fn		; ABS
 		verb	$32,$cf,$0000		; USR
 		verb	$33,$ff,$ffff
-		verb	$34,$55,$e823		; ( used in variable DIM
-		verb	$35,$c3,$e7a3		; unary +
-		verb	$36,$c3,$e76f		; unary -
-		verb	$37,$c3,$e736		; NOT
-		verb	$38,$55,$e823		; ( numeric
-		verb	$39,$f0,$e1d7		; = string
-		verb	$3a,$f0,$e21c		; # string
+		verb	$34,$55,left_paren	; ( used in variable DIM
+		verb	$35,$c3,unary_pos	; unary +
+		verb	$36,$c3,negate		; unary -
+		verb	$37,$c3,not_op		; NOT
+		verb	$38,$55,left_paren	; ( numeric
+		verb	$39,$f0,string_eq	; = string
+		verb	$3a,$f0,string_neq	; # string
 		verb	$3b,$cf,len_fn		; LEN(
-		verb	$3c,$56,$eec2		; ASC(   XXX doesnt' work
-		verb	$3d,$56,Teeae		; SCRN(  ???
-		verb	$3e,$56,$eeba		; , used in SCRN
+		verb	$3c,$56,asc_fn		; ASC(   XXX doesnt' work
+		verb	$3d,$56,scrn_fn		; SCRN(  ???
+		verb	$3e,$56,scrn_comma	; , used in SCRN
 		verb	$3f,$55,left_paren	; (
 		verb	$40,$ff,$ffff
 		verb	$41,$ff,$ffff
@@ -1610,7 +1610,7 @@ verb_addr_h:	rmb	$78
 		verb	$63,$03,print_cr	; PRINT w/o arg
 		verb	$64,$03,poke_stmt	; POKE
 		verb	$65,$07,poke_comma	; , in POKE
-		verb	$66,$03,$ee4e		; COLOR=	???
+		verb	$66,$03,color_stmt	; COLOR=	???
 		verb	$67,$03,$ef00		; PLOT		???
 		verb	$68,$03,$ee3e		; , in PLOT	???
 		verb	$69,$03,$ef00		; HLIN		???
@@ -1753,17 +1753,17 @@ Lebfa:		jmp	var_assign
 
 		fcb	$ff,$ff,$ff,$50
 
-Tec01:		jsr	Tec13
+lt_op:		jsr	gt_eq_op
 		bne	Lec1b
 
-Tec06:		jsr	Tec0b
+gt_op:		jsr	lt_eq_op
 		bne	Lec1b
 
-Tec0b:		jsr	subtract
+lt_eq_op:	jsr	subtract_op
 		jsr	negate
 		bvc	Lec16
 
-Tec13:		jsr	subtract
+gt_eq_op:	jsr	subtract_op
 Lec16:		jsr	sgn_fn
 		lsr	noun_stk_l,x
 Lec1b:		jmp	not_op
@@ -1804,11 +1804,11 @@ category_table:
 		fcb	((syn_cat_1e-1)/2)&$ff	; binary operator
 		fcb	((syn_cat_1f-1)/2)&$ff
 
-Tec40:		jsr	Sefc9
+and_op:		jsr	Sefc9
 		ora	rnd+1,x
 		bpl	Lec4c
 
-Tec47:		jsr	Sefc9
+or_op:		jsr	Sefc9
 		and	rnd+1,x
 Lec4c:		sta	noun_stk_l,x
 		bpl	Lec1b
@@ -2267,7 +2267,8 @@ plot_comma:	jsr	getbyte
 		nop
 		nop
 
-Tee4e:		jsr	getbyte
+; COLOR= statement not usable on Apple 1
+color_stmt:	jsr	getbyte
 		rts
 
 		nop
@@ -2322,7 +2323,8 @@ call_stmt:	jsr	get16bit
 
 		fcb	$20,$34,$ee,$c5,$c8,$90,$bb,$85
 
-Teeae:		lda	himem+1
+; SCRN function not usable on Apple 1
+scrn_fn:	lda	himem+1
 
 Teeb0:		pha
 		lda	himem
@@ -2331,13 +2333,14 @@ Teeb0:		pha
 		sta	noun_stk_h_int,x
 		rts
 
-Teeba:		lda	lomem+1
+scrn_comma:	lda	lomem+1
 
 Teebc:		pha
 		lda	lomem
 		jmp	Lefb3
 
-		fcb	$a5,$85,$2d,$60
+; bogus code, ASC function doesn't work
+asc_fn:		fcb	$a5,$85,$2d,$60
 
 Teec6:		jsr	getbyte
 		cmp	#$28
@@ -2385,7 +2388,7 @@ poke_comma:	rts
 
 		fcb	$ff,$ff,$ff
 
-divide:		jsr	See6c
+divide_op:	jsr	See6c
 		lda	acc
 		sta	p3
 		lda	acc+1
@@ -2444,7 +2447,7 @@ Lef66:		lda	rnd+1
 		sta	noun_stk_h_int,x
 		jmp	mod_op
 
-Tef80:		jsr	get16bit
+himem_cmd:	jsr	get16bit
 		ldy	acc
 		cpy	lomem
 		lda	acc+1
@@ -2455,7 +2458,7 @@ Tef80:		jsr	get16bit
 		sta	himem+1
 Lef93:		jmp	new_cmd
 
-Tef96:		jsr	get16bit
+lomem_cmd:	jsr	get16bit
 		ldy	acc
 		cpy	himem
 		lda	acc+1
@@ -2502,10 +2505,10 @@ Sefe4:		cmp	noun_stk_h_str,x
 		clc
 Lefe9:		jmp	Le102
 
-Tefec:		jsr	clr
+run_cmd:	jsr	clr_cmd
 		jmp	run_warm
 
-Teff2:		jsr	clr
+run_cmd_w_lno:	jsr	clr_cmd
 		jmp	goto_stmt
 
 Seff8:		cpx	#$80
